@@ -11,20 +11,21 @@ abstract class WordRoomDatabase : RoomDatabase() {
 
     abstract fun wordDao(): WordDao
 
-    @Volatile private var instance: WordRoomDatabase? = null
 
     // Makes the wordRoomDatabase a singleton, preventing it of having multiple instances opened at the same time
-    fun getInstance(context: Context): WordRoomDatabase? {
-        return instance ?: synchronized(this) {
-            instance ?: buildDatabase(context).also { instance = it }
+
+
+    companion object {
+        @Volatile private var instance: WordRoomDatabase? = null
+
+        fun getInstance(context: Context): WordRoomDatabase? {
+            return instance ?: synchronized(this) {
+                instance ?: buildDatabase(context).also { instance = it }
+            }
+        }
+        // Creates the database
+        private fun buildDatabase(context: Context): WordRoomDatabase{
+            return Room.databaseBuilder(context.applicationContext,WordRoomDatabase::class.java, "word_database").build()
         }
     }
-
-    // Creates the database
-    private fun buildDatabase(context: Context): WordRoomDatabase{
-        return Room.databaseBuilder(context.applicationContext,WordRoomDatabase::class.java, "word_database").build()
-    }
-
-
-
 }
