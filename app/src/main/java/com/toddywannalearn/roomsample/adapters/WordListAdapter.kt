@@ -8,12 +8,13 @@ import android.view.ViewGroup
 import android.widget.TextView
 import com.toddywannalearn.roomsample.R
 import com.toddywannalearn.roomsample.data.Word
+import java.util.*
 
 
 class WordListAdapter : RecyclerView.Adapter<WordListAdapter.WordViewHolder> {
 
     class WordViewHolder(itemView: View?) : RecyclerView.ViewHolder(itemView) {
-        var wordItemView: TextView
+        val wordItemView: TextView
 
         init {
             wordItemView = itemView!!.findViewById(R.id.textview)
@@ -21,10 +22,13 @@ class WordListAdapter : RecyclerView.Adapter<WordListAdapter.WordViewHolder> {
     }
 
     private val mInflater: LayoutInflater
-    private var mWords: List<Word>
+    private var mWords: List<Word> = Collections.emptyList()
 
-    constructor(context: Context, words: List<Word>){
+    constructor(context: Context){
         mInflater = LayoutInflater.from(context)
+    }
+
+    fun setWords(words: List<Word>){
         mWords = words
         notifyDataSetChanged()
     }
@@ -35,18 +39,12 @@ class WordListAdapter : RecyclerView.Adapter<WordListAdapter.WordViewHolder> {
     }
 
     override fun getItemCount(): Int {
-        if(mWords != null)
-            return mWords.size
-        else return 0
+        return mWords.size
     }
 
     override fun onBindViewHolder(holder: WordViewHolder, position: Int) {
-        if(mWords != null){
-            var current: Word = mWords[position]
-            holder.wordItemView.text = current.mWord
-        } else {
-          holder.wordItemView.text = "No Word"
-        }
+        var current: Word = mWords[position]
+        holder.wordItemView.text = current.mWord
     }
 
 }

@@ -18,7 +18,9 @@ class WordRepository {
         return mAllWords
     }
 
-    fun insert(word: Word) {}
+    fun insert(word: Word) {
+        insertAsyncTask(mWordDao).execute(word)
+    }
 
     private class insertAsyncTask : AsyncTask<Word,Void,Void>{
 
@@ -28,8 +30,9 @@ class WordRepository {
             mAsyncTaskDao = dao
         }
 
-        override fun doInBackground(vararg params: Word?): Void? {
-            params[0]?.let { mAsyncTaskDao.insert(it) }
+        override fun doInBackground(vararg params: Word): Void? {
+            mAsyncTaskDao.insert(params[0])
+            //params[0]?.let { mAsyncTaskDao.insert(it) }
             return null
         }
     }

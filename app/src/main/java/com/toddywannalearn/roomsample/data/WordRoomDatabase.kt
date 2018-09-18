@@ -16,7 +16,6 @@ abstract class WordRoomDatabase : RoomDatabase() {
 
     // Makes the wordRoomDatabase a singleton, preventing it of having multiple instances opened at the same time
 
-
     companion object {
         @Volatile private var instance: WordRoomDatabase? = null
 
@@ -28,6 +27,7 @@ abstract class WordRoomDatabase : RoomDatabase() {
         // Creates the database
         private fun buildDatabase(context: Context): WordRoomDatabase{
             return Room.databaseBuilder(context.applicationContext,WordRoomDatabase::class.java, "word_database")
+                    .fallbackToDestructiveMigration()
                     .addCallback(object : RoomDatabase.Callback(){
                         override fun onOpen(db: SupportSQLiteDatabase) {
                             super.onOpen(db)
@@ -46,7 +46,7 @@ abstract class WordRoomDatabase : RoomDatabase() {
             mDao = db!!.wordDao()
         }
 
-        override fun doInBackground(vararg params: Void?): Void? {
+        override fun doInBackground(vararg params: Void): Void? {
             mDao.deleteAll()
             var word = Word("Hello")
             mDao.insert(word)
